@@ -1,3 +1,4 @@
+package com.example;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -9,7 +10,7 @@ public class MovieTheaterApp {
 
         int choice;
         do {
-            System.out.println("===== Movie Theater Seat Reservation System =====");
+            System.out.println("Movie Theater Seat Reservation System ");
             System.out.println("1. Display Seating Chart");
             System.out.println("2. Reserve a Seat");
             System.out.println("3. Cancel a Reservation");

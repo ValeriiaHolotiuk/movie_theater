@@ -1,3 +1,5 @@
+package com.example;
+
 import javafx.application.Application;
 import javafx.geometry.*;
 import javafx.scene.Scene;
@@ -24,6 +26,7 @@ public class TheaterFX extends Application {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
 
+       
         VBox top = new VBox(10);
         Label screen = new Label("SCREEN");
         screen.setFont(Font.font(18));
@@ -41,16 +44,19 @@ public class TheaterFX extends Application {
         top.getChildren().addAll(screen, tb);
         root.setTop(top);
 
+        
         GridPane grid = new GridPane();
         grid.setHgap(8); grid.setVgap(8); grid.setPadding(new Insets(10));
         grid.setAlignment(Pos.CENTER);
 
+        
         for (int c = 0; c < COLS; c++) {
             Label lbl = new Label(String.valueOf(c + 1));
             GridPane.setHalignment(lbl, HPos.CENTER);
             grid.add(lbl, mapCol(c), 0);
         }
 
+        
         for (int r = 0; r < ROWS; r++) {
             Label rowLabel = new Label(String.valueOf((char)('A' + r)));
             grid.add(rowLabel, 0, r + 1);
@@ -60,7 +66,7 @@ public class TheaterFX extends Application {
                 Button b = new Button(label(r, c));
                 b.setPrefSize(56, 34);
                 b.setTooltip(new Tooltip(label(r,c)));
-                styleOpen(b); 
+                styleOpen(b);
                 final int rr = r, cc = c;
                 b.setOnAction(e -> handleSeatClick(rr, cc));
                 seatBtns[r][c] = b;
@@ -68,8 +74,9 @@ public class TheaterFX extends Application {
             }
         }
 
-        grid.getColumnConstraints().add(new ColumnConstraints(28)); 
-        for (int ui = 1; ui <= COLS + 1; ui++) { 
+       
+        grid.getColumnConstraints().add(new ColumnConstraints(28));
+        for (int ui = 1; ui <= COLS + 1; ui++) {
             ColumnConstraints cc = new ColumnConstraints();
             cc.setHalignment(HPos.CENTER);
             cc.setMinWidth(ui == AISLE_AFTER_COL + 1 ? 22 : 60);
@@ -78,6 +85,7 @@ public class TheaterFX extends Application {
 
         root.setCenter(grid);
 
+        
         HBox bottom = new HBox(16);
         Label legend = new Label("Legend:  Open = 🟩  Reserved = 🟥");
         status = new Label("Click a green seat to reserve. Click a red seat to cancel.");
@@ -87,6 +95,7 @@ public class TheaterFX extends Application {
         bottom.setPadding(new Insets(0, 10, 10, 10));
         root.setBottom(bottom);
 
+        
         Scene scene = new Scene(root, 960, 600);
         scene.setFill(javafx.scene.paint.Paint.valueOf("#0f172a"));
         root.setStyle("-fx-background-color: linear-gradient(to bottom,#0f172a,#111827); -fx-text-fill:#e5e7eb;");
@@ -96,7 +105,7 @@ public class TheaterFX extends Application {
         stage.show();
     }
 
-    private int mapCol(int c) { 
+    private int mapCol(int c) {
         int ui = c + 1;
         if (c >= AISLE_AFTER_COL) ui += 1;
         return ui;
@@ -109,7 +118,8 @@ public class TheaterFX extends Application {
             manager.reserve(r, c);
             setStatus("Reserved " + label(r,c));
         } else {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Cancel reservation for " + label(r,c) + "?",
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Cancel reservation for " + label(r,c) + "?",
                     ButtonType.OK, ButtonType.CANCEL);
             confirm.setHeaderText(null);
             confirm.setTitle("Cancel reservation");
@@ -135,7 +145,9 @@ public class TheaterFX extends Application {
         manager.suggestFirstAvailable().ifPresentOrElse(rc -> {
             setStatus("Suggested: " + label(rc[0], rc[1]));
             seatBtns[rc[0]][rc[1]].requestFocus();
-            seatBtns[rc[0]][rc[1]].setStyle(seatBtns[rc[0]][rc[1]].getStyle() + "; -fx-border-color: black; -fx-border-width: 3;");
+            seatBtns[rc[0]][rc[1]].setStyle(
+                seatBtns[rc[0]][rc[1]].getStyle() + "; -fx-border-color: black; -fx-border-width: 3;"
+            );
         }, () -> setStatus("No seats available."));
     }
 
